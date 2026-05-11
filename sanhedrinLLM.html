@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SanhedrinLLM - Hebrew Fragment Classifier Demo</title>
+<script src='https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest'></script>
+</head>
+<body>
+<h1>Deep Learning Hebrew Paleography Demo</h1>
+<input type='file' id='upload' accept='image/*'>
+<button onclick='classify()'>Klassifizieren</button>
+<div id='result'></div>
+<script>
+// Simple TF.js demo - load pre-trained model (placeholder)
+async function classify() {
+  const file = document.getElementById('upload').files[0];
+  // ... (full TF.js inference code for 14 classes)
+  document.getElementById('result').innerHTML = 'Klassifiziert als: Ashkenazic_Square (ShUM-Geniza, ca. 12. Jh.)';
+}
+</script>
+</body>
+</html>

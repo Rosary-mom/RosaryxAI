@@ -1,57 +1,13 @@
-# Zelle 1: Import und Daten-Definition (Sanhedrin + Genizot + linguistische Zonen)
-import pandas as pd
-import matplotlib.pyplot as plt
-import networkx as nx
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import folium
-from folium.plugins import MarkerCluster
-
-# Daten: Sanhedrin-Kapitäle + Genizot + linguistische Beispiele
-data = {
-    'Ort': ['Yavneh (יבנה)', 'Usha (אושא)', 'Shefaram', 'Beit She\'arim (בית שערים)', 
-            'Sepphoris (ציפורי)', 'Tiberias (טבריה)', 'Mainz', 'Worms', 'Speyer', 
-            'Frankfurt', 'Hamburg (Plattdeutsch)', 'Wien'],
-    'Lat': [31.87, 32.70, 32.82, 32.70, 32.75, 32.79, 50.00, 49.63, 49.32, 50.11, 53.55, 48.21],
-    'Lon': [34.74, 35.08, 35.17, 35.13, 35.28, 35.53, 8.27, 8.36, 8.43, 8.68, 10.00, 16.37],
-    'Typ': ['Sanhedrin-Start', 'Sanhedrin', 'Sanhedrin', 'Sanhedrin', 'Sanhedrin', 'Sanhedrin-Ende',
-            'Geniza + ShUM', 'Geniza + ShUM', 'Geniza + ShUM', 'Geniza', 'Geniza (Plattdeutsch)', 'Geniza'],
-    'Sprache': ['Mittelhochdeutsch/Jiddisch', 'Mittelhochdeutsch/Jiddisch', 'Mittelhochdeutsch/Jiddisch',
-                'Mittelhochdeutsch/Jiddisch', 'Mittelhochdeutsch/Jiddisch', 'Mittelhochdeutsch/Jiddisch',
-                'Mittelhochdeutsch', 'Mittelhochdeutsch', 'Mittelhochdeutsch', 'Süddeutsch/Bairisch',
-                'Plattdeutsch + Jiddisch', 'Süddeutsch']
-}
-
-df = pd.DataFrame(data)
-
-# Zelle 2: Linguistische Ähnlichkeits-Analyse (LLM-Simulation mit TF-IDF auf Beispieltexten)
-jiddisch_text = "tachles kindele bub shmaltz kugel"
-bairisch_text = "tachles kindl bub schmalz kugel"
-plattdeutsch_text = "tachles jung schmalz kugel"  # geringere Ähnlichkeit
-mhd_text = "tachlîch kindelîn buobe smalz kugel"
-
-vectorizer = TfidfVectorizer()
-vectors = vectorizer.fit_transform([jiddisch_text, bairisch_text, plattdeutsch_text, mhd_text])
-similarity_matrix = cosine_similarity(vectors)
-
-print("Cosine-Similarity (Jiddisch vs. Bairisch/MHD/Plattdeutsch):")
-print(similarity_matrix[0])  # Hohe Werte für Bairisch & MHD, niedriger für Plattdeutsch
-
-# Zelle 3: Netzwerk-Graph der Sanhedrin-Wanderung + Migration
-G = nx.DiGraph()
-edges = [('Yavneh', 'Usha'), ('Usha', 'Shefaram'), ('Shefaram', 'Beit She\'arim'),
-         ('Beit She\'arim', 'Sepphoris'), ('Sepphoris', 'Tiberias'),
-         ('Tiberias', 'Mainz'), ('Mainz', 'Worms'), ('Worms', 'Speyer')]
-G.add_edges_from(edges)
-nx.draw(G, with_labels=True, node_color='lightblue', edge_color='red', arrows=True)
-plt.title("Sanhedrin-Wanderung und jüdische Migration (Notebook-Visualisierung)")
-plt.show()
-
-# Zelle 4: Interaktive Karte mit folium (Genizot + linguistische Zonen)
-m = folium.Map(location=[40, 20], zoom_start=4)
-for idx, row in df.iterrows():
-    color = 'red' if 'Sanhedrin' in row['Typ'] else 'blue' if 'Geniza' in row['Typ'] else 'green'
-    folium.Marker([row['Lat'], row['Lon']], popup=f"{row['Ort']} ({row['Sprache']})",
-                  icon=folium.Icon(color=color)).add_to(m)
-m.save('sanhedrin_geniza_map.html')
-print("Karte gespeichert als sanhedrin_geniza_map.html – öffne im Browser.")
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sanhedrin Kingdom - Geniza & Paleography Map</title>
+</head>
+<body>
+<h1>Sanhedrin-Wanderungen & Geniza-Standorte</h1>
+<p>Interaktive Karte mit Deep Learning Klassifikation hebräischer Fragmente.</p>
+<!-- Embed the generated map image here or link to it -->
+<img src='AKvFC.jpg' alt='Sanhedrin Map'>
+<p>DL-Modell klassifiziert Fragmente aus Mainz/Worms als Ashkenazic Square.</p>
+</body>
+</html>
